@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Temporal GNN Risk Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 24px;
+            background: #0b1724;
+            color: #f5f5f5;
+        }
+        h1 {
+            margin-bottom: 8px;
+        }
+        .control-panel {
+            margin-bottom: 20px;
+        }
+        label, select, button {
+            font-size: 14px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 16px;
+            background: #121f33;
+        }
+        th, td {
+            border: 1px solid #2b3b52;
+            padding: 8px;
+            text-align: left;
+            font-size: 13px;
+        }
+        th {
+            background: #192841;
+        }
+        .high-risk {
+            background-color: #5b1b1b;
+        }
+    </style>
+</head>
+<body>
+    <h1>Temporal Graph Risk Monitor (GNN)</h1>
+    <p>Demo: Synthetic inter-institution exposure network with temporal risk propagation modeled using a Graph Neural Network.</p>
+
+    <div class="control-panel">
+        <label for="timestep">Select timestep (1–{{ max_timestep }}): </label>
+        <select id="timestep">
+            {% for t in range(1, max_timestep + 1) %}
+                <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}
+        </select>
+        <button onclick="loadData()">Run Prediction</button>
+    </div>
+
+    <div id="summary"></div>
+    <table id="results-table" style="display:none;">
+        <thead>
+            <tr>
+                <th>Node ID</th>
+                <th>Liquidity</th>
+                <th>Capital Adequacy</th>
+                <th>Leverage</th>
+                <th>Stress(t)</th>
+                <th>Label: High Risk(t+1)</th>
+                <th>Predicted Prob High Risk(t+1)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        async function loadData() {
+            const t = document.getElementById('timestep').value;
+            const res = await fetch(`/predict?t=${t}`);
+            const data = await res.json();
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            const nodes = data.nodes;
+            const tbody = document.querySelector('#results-table tbody');
+            tbody.innerHTML = '';
+
+            let highCount = 0;
+
+            nodes.forEach(node => {
+                const tr = document.createElement('tr');
+                const p = node.predicted_prob_high_risk;
+
+                if (p > 0.7) {
+                    tr.classList.add('high-risk');
+                    highCount++;
+                }
+
+                tr.innerHTML = `
+                    <td>${node.id}</td>
+                    <td>${node.features.liquidity_ratio.toFixed(3)}</td>
+                    <td>${node.features.capital_adequacy.toFixed(3)}</td>
+                    <td>${node.features.leverage.toFixed(3)}</td>
+                    <td>${node.features.stress_t.toFixed(3)}</td>
+                    <td>${node.label_next_high_risk}</td>
+                    <td>${p.toFixed(3)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('results-table').style.display = 'table';
+            const summary = document.getElementById('summary');
+            summary.innerHTML = `
+                <p>Timestep <strong>${data.timestep}</strong> – 
+                Predicted high-risk institutions (p &gt; 0.7): <strong>${highCount}</strong> / ${nodes.length}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
