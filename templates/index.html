@@ -2,118 +2,424 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Temporal GNN Risk Monitor</title>
+    <title>Temporal Graph Risk Dashboard (GNN)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            margin: 24px;
-            background: #0b1724;
+            background: #050b12;
             color: #f5f5f5;
         }
-        h1 {
-            margin-bottom: 8px;
+        .layout {
+            display: flex;
+            min-height: 100vh;
         }
-        .control-panel {
-            margin-bottom: 20px;
+        .sidebar {
+            width: 320px;
+            background: #081321;
+            padding: 20px;
+            border-right: 1px solid #1b293b;
         }
-        label, select, button {
+        .sidebar h1 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .sidebar h2 {
             font-size: 14px;
+            margin: 18px 0 6px 0;
+            color: #9fb4d6;
+        }
+        label, select, input, button {
+            font-size: 13px;
+            margin: 4px 0;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        button {
+            padding: 6px 10px;
+            background: #2563eb;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .main {
+            flex: 1;
+            padding: 14px 18px;
+        }
+        .graph-container {
+            width: 100%;
+            height: 420px;
+            border: 1px solid #1b293b;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: #050b12;
+        }
+        #graph-svg {
+            width: 100%;
+            height: 100%;
         }
         table {
-            border-collapse: collapse;
             width: 100%;
-            margin-top: 16px;
-            background: #121f33;
-        }
-        th, td {
-            border: 1px solid #2b3b52;
-            padding: 8px;
-            text-align: left;
-            font-size: 13px;
+            border-collapse: collapse;
+            font-size: 12px;
         }
         th {
-            background: #192841;
+            background: #0b1724;
+            padding: 8px;
+            position: sticky;
+            top: 0;
         }
-        .high-risk {
-            background-color: #5b1b1b;
+        td {
+            border-bottom: 1px solid #1b293b;
+            padding: 6px;
+        }
+        .high-risk-row {
+            background: rgba(239, 68, 68, 0.18);
         }
     </style>
 </head>
 <body>
-    <h1>Temporal Graph Risk Monitor (GNN)</h1>
-    <p>Demo: Synthetic inter-institution exposure network with temporal risk propagation modeled using a Graph Neural Network.</p>
 
-    <div class="control-panel">
-        <label for="timestep">Select timestep (1–{{ max_timestep }}): </label>
+<div class="layout">
+    <div class="sidebar">
+        <h1>Financial Network GNN</h1>
+
+        <h2>Timestep</h2>
         <select id="timestep">
             {% for t in range(1, max_timestep + 1) %}
                 <option value="{{ t }}">{{ t }}</option>
             {% endfor %}
         </select>
-        <button onclick="loadData()">Run Prediction</button>
+        <button onclick="loadData()">Load</button>
+        <button onclick="playAnimation()">Play</button>
+        <button onclick="stopAnimation()">Stop</button>
+
+        <h2>Stress Test</h2>
+        <label>Liquidity Shock (%)</label>
+        <input type="range" id="shock_liquidity" min="-50" max="50" value="0">
+
+        <label>Exposure Multiplier (%)</label>
+        <input type="range" id="shock_exposure" min="50" max="200" value="100">
+
+        <label>Macro Shock (%)</label>
+        <input type="range" id="shock_macro" min="-100" max="100" value="0">
+
+        <button onclick="applyStressTest()">Apply Stress Test</button>
+
     </div>
 
-    <div id="summary"></div>
-    <table id="results-table" style="display:none;">
-        <thead>
+    <div class="main">
+        <h2>Network Visualization</h2>
+        <div class="graph-container">
+            <svg id="graph-svg"></svg>
+        </div>
+
+        <h2>High-Risk Predictions</h2>
+        <table>
+            <thead>
             <tr>
-                <th>Node ID</th>
-                <th>Liquidity</th>
-                <th>Capital Adequacy</th>
-                <th>Leverage</th>
+                <th>Institution</th>
                 <th>Stress(t)</th>
-                <th>Label: High Risk(t+1)</th>
-                <th>Predicted Prob High Risk(t+1)</th>
+                <th>True Label</th>
+                <th>Predicted Risk</th>
             </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+            </thead>
+            <tbody id="results-body"></tbody>
+        </table>
+    </div>
+</div>
 
-    <script>
-        async function loadData() {
-            const t = document.getElementById('timestep').value;
-            const res = await fetch(`/predict?t=${t}`);
-            const data = await res.json();
+<script>
+// ------------ Vars & helpers ------------
+let animTimer = null;
+let timelineTimer = null;
+let timelineFrames = [];
+let timelineIndex = 0;
+let playSpeedMs = 1100;
 
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
+const svg = d3.select("#graph-svg");
+let nodesCache = [], linksCache = [];
 
-            const nodes = data.nodes;
-            const tbody = document.querySelector('#results-table tbody');
-            tbody.innerHTML = '';
+// Small inspector panel DOM (append to .sidebar)
+(function buildInspectorPanel() {
+    const sidebar = document.querySelector(".sidebar");
+    const panel = document.createElement("div");
+    panel.id = "inspector";
+    panel.style.marginTop = "16px";
+    panel.style.padding = "10px";
+    panel.style.background = "#071726";
+    panel.style.border = "1px solid #102334";
+    panel.style.borderRadius = "8px";
+    panel.innerHTML = `<h3 id="inspector-title">Select a node</h3>
+      <div id="inspector-body">
+        <p>Click a yellow node in the graph to inspect and run node-level stress tests.</p>
+      </div>`;
+    sidebar.appendChild(panel);
+})();
 
-            let highCount = 0;
+function setInspectorContent(html) {
+    document.getElementById("inspector-body").innerHTML = html;
+}
+function setInspectorTitle(text) {
+    document.getElementById("inspector-title").innerText = text;
+}
 
-            nodes.forEach(node => {
-                const tr = document.createElement('tr');
-                const p = node.predicted_prob_high_risk;
+function getInitials(name) {
+    return name.replace(/[()]/g,"").split(/\s+/).map(w => w[0]).join("").toUpperCase();
+}
+function riskColor(p) {
+    if (p < 0.3) return "#22c55e";
+    if (p < 0.7) return "#eab308";
+    return "#ef4444";
+}
 
-                if (p > 0.7) {
-                    tr.classList.add('high-risk');
-                    highCount++;
-                }
+// ------------ Load snapshot & draw graph ------------
+async function loadData() {
+    const t = parseInt(document.getElementById("timestep").value);
+    const res = await fetch(`/predict?t=${t}`);
+    const data = await res.json();
+    nodesCache = data.nodes;
+    linksCache = data.edges;
+    drawGraph(nodesCache, linksCache);
+    updateTable(nodesCache);
+}
 
-                tr.innerHTML = `
-                    <td>${node.id}</td>
-                    <td>${node.features.liquidity_ratio.toFixed(3)}</td>
-                    <td>${node.features.capital_adequacy.toFixed(3)}</td>
-                    <td>${node.features.leverage.toFixed(3)}</td>
-                    <td>${node.features.stress_t.toFixed(3)}</td>
-                    <td>${node.label_next_high_risk}</td>
-                    <td>${p.toFixed(3)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+// drawGraph now attaches click handlers
+function drawGraph(nodes, links) {
+    svg.selectAll("*").remove();
+    const W = document.querySelector(".graph-container").clientWidth;
+    const H = document.querySelector(".graph-container").clientHeight;
 
-            document.getElementById('results-table').style.display = 'table';
-            const summary = document.getElementById('summary');
-            summary.innerHTML = `
-                <p>Timestep <strong>${data.timestep}</strong> – 
-                Predicted high-risk institutions (p &gt; 0.7): <strong>${highCount}</strong> / ${nodes.length}</p>
-            `;
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(d => 90 + (1 - (d.exposure||0.5))*60))
+        .force("charge", d3.forceManyBody().strength(-120))
+        .force("center", d3.forceCenter(W/2, H/2));
+
+    const link = svg.append("g")
+        .attr("stroke", "#1f2937")
+        .selectAll("line")
+        .data(links)
+        .enter()
+        .append("line")
+        .attr("stroke-width", d => 0.6 + (d.exposure || 0.2));
+
+    const node = svg.append("g")
+        .selectAll("circle")
+        .data(nodes)
+        .enter()
+        .append("circle")
+        .attr("r", 9)
+        .attr("fill", d => {
+    const score = Math.max(d.prob || 0, d.stress || 0);
+    if (score > 0.7) return "#ef4444";
+    if (score > 0.4) return "#fbbf24";
+    return "#22c55e";
+})
+
+        .attr("stroke", "#071824")
+        .attr("stroke-width", 1.0)
+        .on("click", (event, d) => onNodeClick(d));
+
+    const label = svg.append("g")
+        .selectAll("text")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .attr("font-size", 9)
+        .attr("fill", "#cbd5f5")
+        .text(d => getInitials(d.id));
+
+    node.append("title")
+        .text(d => `${d.id}\nStress(t): ${d.stress.toFixed(3)}\nPredicted: ${d.prob.toFixed(3)}\nTrueNext: ${d.trueLabel}`);
+
+    simulation.on("tick", () => {
+        link.attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        node.attr("cx", d => d.x).attr("cy", d => d.y);
+        label.attr("x", d => d.x + 12).attr("y", d => d.y + 4);
+    });
+}
+
+// ------------ Click handler & inspector UI ------------
+function onNodeClick(node) {
+    // node is the node object -> show inspector
+    setInspectorTitle(node.id);
+    const html = `
+        <p><strong>Current stress:</strong> ${node.stress.toFixed(3)}</p>
+        <p><strong>Predicted p(high risk):</strong> ${node.prob.toFixed(3)}</p>
+        <hr>
+        <label for="scenario-select">Scenario</label>
+        <select id="scenario-select">
+            <option value="liquidity_drain">Liquidity Drain</option>
+            <option value="credit_default">Credit Default</option>
+            <option value="exposure_spike">Exposure Spike</option>
+            <option value="payment_freeze">Payment System Freeze</option>
+            <option value="nbfc_collapse">NBFC Collapse</option>
+            <option value="mutualfund_run">Mutual Fund Run</option>
+            <option value="generic">Generic Shock</option>
+        </select>
+        <div style="margin-top:8px;">
+            <label>Magnitude (0.0 - 1.0): <span id="mag-val">0.5</span></label>
+            <input id="mag-slider" type="range" min="0" max="100" value="50">
+        </div>
+        <div style="margin-top:8px;">
+            <label>Propagation Steps: </label>
+            <input id="steps-input" type="number" min="1" max="10" value="5" style="width:60px;">
+        </div>
+        <div style="margin-top:8px;">
+            <label>Macro override (%)</label>
+            <input id="macro-slider" type="range" min="-50" max="50" value="0">
+            <div style="font-size:11px;color:#9fb4d6">Macro value shown as fraction (e.g. 10 → 0.1)</div>
+        </div>
+        <div style="margin-top:10px;">
+            <button onclick="runNodeScenario('${escapeQuotes(node.id)}')">Run Scenario</button>
+            <button onclick="clearTimeline()">Clear Timeline</button>
+        </div>
+        <div id="timeline-controls" style="margin-top:12px; display:none;">
+            <button onclick="playTimeline()">Play Timeline</button>
+            <button onclick="pauseTimeline()">Pause</button>
+            <span id="timeline-status" style="margin-left:8px;color:#9fb4d6"></span>
+        </div>
+    `;
+    setInspectorContent(html);
+
+    // connect slider display
+    const magSlider = document.getElementById("mag-slider");
+    const magVal = document.getElementById("mag-val");
+    magSlider.oninput = () => { magVal.innerText = (magSlider.value/100).toFixed(2); };
+}
+
+// helper to escape single quotes in node id used inside onclick string above
+function escapeQuotes(s) { return s.replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+
+// ------------ Call the backend with node-level scenario ------------
+async function runNodeScenario(nodeName) {
+    const scenario = document.getElementById("scenario-select").value;
+    const magnitude = parseFloat(document.getElementById("mag-slider").value)/100.0;
+    const steps = parseInt(document.getElementById("steps-input").value);
+    const macro = parseFloat(document.getElementById("macro-slider").value)/100.0;
+    const t = parseInt(document.getElementById("timestep").value);
+
+    // call backend
+    const res = await fetch("/stress_node", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            timestep: t,
+            node: nodeName,
+            scenario: scenario,
+            magnitude: magnitude,
+            steps: steps,
+            macro: macro
+        })
+    });
+
+    const data = await res.json();
+    if (data.error) {
+        alert("Error: " + data.error);
+        return;
+    }
+
+    // store timeline frames for playback
+    timelineFrames = data.timeline;
+    timelineIndex = 0;
+    document.getElementById("timeline-controls").style.display = "block";
+    document.getElementById("timeline-status").innerText = `Loaded ${timelineFrames.length} frames`;
+    // show first frame immediately
+    renderTimelineFrame(0);
+}
+
+// render one timeline frame (index)
+function renderTimelineFrame(idx) {
+    if (!timelineFrames || timelineFrames.length === 0) return;
+    const frame = timelineFrames[idx];
+    const nodes = frame.nodes.map(n => ({
+        id: n.id,
+        stress: n.features.stress_t,
+        trueLabel: n.label_next_high_risk,
+        prob: n.predicted_prob_high_risk
+    }));
+    const edges = frame.edges;
+    drawGraph(nodes, edges);
+    updateTable(nodes);
+    document.getElementById("timeline-status").innerText = `Frame ${idx}/${timelineFrames.length-1}`;
+}
+
+function playTimeline() {
+    pauseTimeline();
+    if (!timelineFrames || timelineFrames.length === 0) return;
+    timelineTimer = setInterval(() => {
+        renderTimelineFrame(timelineIndex);
+        timelineIndex++;
+        if (timelineIndex >= timelineFrames.length) {
+            clearInterval(timelineTimer);
+            timelineTimer = null;
+            timelineIndex = 0;
         }
-    </script>
+    }, playSpeedMs);
+}
+
+function pauseTimeline() {
+    if (timelineTimer) clearInterval(timelineTimer);
+    timelineTimer = null;
+}
+
+function clearTimeline() {
+    timelineFrames = [];
+    timelineIndex = 0;
+    document.getElementById("timeline-controls").style.display = "none";
+    document.getElementById("timeline-status").innerText = "";
+    // reload base snapshot
+    loadData();
+}
+
+// ------------ applyStressTest (global) - keep but ensure compatibility ------------
+async function applyStressTest() {
+    const liquidity = document.getElementById("shock_liquidity").value / 100;
+    const exposure = document.getElementById("shock_exposure").value / 100;
+    const macro = document.getElementById("shock_macro").value / 100;
+    const t = parseInt(document.getElementById("timestep").value);
+
+    const res = await fetch("/stress_test", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            liquidity_factor: 1 + liquidity,
+            exposure_factor: exposure,
+            macro: macro,
+            timestep: t
+        })
+    });
+
+    const data = await res.json();
+    nodesCache = data.nodes;
+    linksCache = data.edges;
+    drawGraph(nodesCache, linksCache);
+    updateTable(nodesCache);
+}
+
+// ------------ small utility: update table (keeps same layout) ------------
+function updateTable(nodes) {
+    const tbody = document.getElementById("results-body");
+    tbody.innerHTML = "";
+    nodes.forEach(n => {
+        const tr = document.createElement("tr");
+        if (n.prob > 0.7) tr.classList.add("high-risk-row");
+        tr.innerHTML = `<td>${n.id}</td><td>${(n.stress||n.features?.stress_t||0).toFixed(3)}</td><td>${n.trueLabel||0}</td><td>${(n.prob||n.predicted_prob_high_risk||0).toFixed(3)}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+// ------------ init ------------
+loadData();
+
+</script>
 </body>
 </html>
