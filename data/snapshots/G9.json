@@ -1,0 +1,1002 @@
+{
+  "timestep": 8,
+  "nodes": [
+    {
+      "id": "State Bank of India",
+      "features": {
+        "liquidity_ratio": 0.184,
+        "capital_adequacy": 0.111,
+        "leverage": 11.630059192043136,
+        "base_risk": 0.48180103222863435,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "HDFC Bank",
+      "features": {
+        "liquidity_ratio": 0.668,
+        "capital_adequacy": 0.171,
+        "leverage": 17.5659273276298,
+        "base_risk": 0.31406082377092853,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "ICICI Bank",
+      "features": {
+        "liquidity_ratio": 0.619,
+        "capital_adequacy": 0.129,
+        "leverage": 9.881074694951113,
+        "base_risk": 0.20554765609008102,
+        "stress_t": 0.8672811563111029
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Axis Bank",
+      "features": {
+        "liquidity_ratio": 0.122,
+        "capital_adequacy": 0.15,
+        "leverage": 9.427766985176223,
+        "base_risk": 0.49657700012196093,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Kotak Mahindra Bank",
+      "features": {
+        "liquidity_ratio": 0.946,
+        "capital_adequacy": 0.194,
+        "leverage": 27.871609755511212,
+        "base_risk": 0.33138014166775104,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 0
+    },
+    {
+      "id": "Bank of Baroda",
+      "features": {
+        "liquidity_ratio": 0.97,
+        "capital_adequacy": 0.195,
+        "leverage": 26.325236386684,
+        "base_risk": 0.46105112269216075,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Punjab National Bank",
+      "features": {
+        "liquidity_ratio": 0.365,
+        "capital_adequacy": 0.114,
+        "leverage": 26.278416787921422,
+        "base_risk": 0.21109300711827828,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Canara Bank",
+      "features": {
+        "liquidity_ratio": 0.601,
+        "capital_adequacy": 0.191,
+        "leverage": 22.400744916874324,
+        "base_risk": 0.2730552023546567,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Union Bank of India",
+      "features": {
+        "liquidity_ratio": 0.613,
+        "capital_adequacy": 0.074,
+        "leverage": 20.375180667479242,
+        "base_risk": 0.5086135263293564,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "IDBI Bank",
+      "features": {
+        "liquidity_ratio": 0.767,
+        "capital_adequacy": 0.158,
+        "leverage": 22.56210209967773,
+        "base_risk": 0.3577041289219453,
+        "stress_t": 0.42762793252144093
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Bajaj Finance",
+      "features": {
+        "liquidity_ratio": 0.424,
+        "capital_adequacy": 0.101,
+        "leverage": 25.23402888696284,
+        "base_risk": 0.39566736798062785,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Mahindra Finance",
+      "features": {
+        "liquidity_ratio": 0.922,
+        "capital_adequacy": 0.132,
+        "leverage": 17.53790736717999,
+        "base_risk": 0.388581123647016,
+        "stress_t": 0.4026803466344307
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Tata Capital",
+      "features": {
+        "liquidity_ratio": 0.818,
+        "capital_adequacy": 0.151,
+        "leverage": 22.549171931442583,
+        "base_risk": 0.3848444237264607,
+        "stress_t": 0.9797168903442621
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Shriram Finance",
+      "features": {
+        "liquidity_ratio": 0.404,
+        "capital_adequacy": 0.113,
+        "leverage": 7.349548496021725,
+        "base_risk": 0.3764271383078482,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Muthoot Finance",
+      "features": {
+        "liquidity_ratio": 0.62,
+        "capital_adequacy": 0.065,
+        "leverage": 16.639950453311506,
+        "base_risk": 0.08172552425292551,
+        "stress_t": 0.4072989213210275
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "LIC of India",
+      "features": {
+        "liquidity_ratio": 0.632,
+        "capital_adequacy": 0.064,
+        "leverage": 5.93370471873036,
+        "base_risk": 0.40359568129049506,
+        "stress_t": 0.4841530521499473
+      },
+      "label_next_high_risk": 0
+    },
+    {
+      "id": "SBI Life Insurance",
+      "features": {
+        "liquidity_ratio": 0.84,
+        "capital_adequacy": 0.11,
+        "leverage": 8.17651281629712,
+        "base_risk": 0.5840570211699319,
+        "stress_t": 0.012511132226405857
+      },
+      "label_next_high_risk": 0
+    },
+    {
+      "id": "HDFC Life Insurance",
+      "features": {
+        "liquidity_ratio": 0.294,
+        "capital_adequacy": 0.147,
+        "leverage": 7.1336866248442,
+        "base_risk": 0.36928265001066213,
+        "stress_t": 0.4581593130335143
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "ICICI Prudential",
+      "features": {
+        "liquidity_ratio": 0.147,
+        "capital_adequacy": 0.134,
+        "leverage": 18.515878040252662,
+        "base_risk": 0.5545153236427556,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Bajaj Allianz Life",
+      "features": {
+        "liquidity_ratio": 0.978,
+        "capital_adequacy": 0.132,
+        "leverage": 13.07391182353115,
+        "base_risk": 0.47431489664073123,
+        "stress_t": 0.4307082389930397
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Reliance Mutual Fund",
+      "features": {
+        "liquidity_ratio": 0.816,
+        "capital_adequacy": 0.098,
+        "leverage": 15.974285517640903,
+        "base_risk": 0.2342271383364867,
+        "stress_t": 0.39721445207532013
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "HDFC Mutual Fund",
+      "features": {
+        "liquidity_ratio": 0.256,
+        "capital_adequacy": 0.082,
+        "leverage": 11.256072454114882,
+        "base_risk": 0.5991952595912231,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "ICICI Prudential MF",
+      "features": {
+        "liquidity_ratio": 0.594,
+        "capital_adequacy": 0.16,
+        "leverage": 21.504934417943282,
+        "base_risk": 0.40659443981906135,
+        "stress_t": 0.8232325260905559
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Nippon India Mutual Fund",
+      "features": {
+        "liquidity_ratio": 0.651,
+        "capital_adequacy": 0.119,
+        "leverage": 11.193274737528936,
+        "base_risk": 0.5977026479719234,
+        "stress_t": 0.5535366526421971
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "UTI Mutual Fund",
+      "features": {
+        "liquidity_ratio": 0.42,
+        "capital_adequacy": 0.166,
+        "leverage": 5.359837215743896,
+        "base_risk": 0.31439120581899965,
+        "stress_t": 0.38511111139412124
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Paytm Payments Bank",
+      "features": {
+        "liquidity_ratio": 0.188,
+        "capital_adequacy": 0.129,
+        "leverage": 16.836794269514144,
+        "base_risk": 0.6308008520708456,
+        "stress_t": 1.0
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "PhonePe Payments",
+      "features": {
+        "liquidity_ratio": 0.256,
+        "capital_adequacy": 0.121,
+        "leverage": 14.962618359934336,
+        "base_risk": 0.5814601477788626,
+        "stress_t": 0.4891634152106817
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Airtel Payments Bank",
+      "features": {
+        "liquidity_ratio": 0.141,
+        "capital_adequacy": 0.112,
+        "leverage": 20.646497892855912,
+        "base_risk": 0.5484895710726855,
+        "stress_t": 0.5876034440239856
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Razorpay",
+      "features": {
+        "liquidity_ratio": 0.553,
+        "capital_adequacy": 0.18,
+        "leverage": 21.467340790473624,
+        "base_risk": 0.3196313711252673,
+        "stress_t": 0.35245914593902455
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Cashfree Payments",
+      "features": {
+        "liquidity_ratio": 0.627,
+        "capital_adequacy": 0.192,
+        "leverage": 19.386854446896976,
+        "base_risk": 0.35913449106757406,
+        "stress_t": 0.5191539307230898
+      },
+      "label_next_high_risk": 0
+    },
+    {
+      "id": "Standard Chartered India",
+      "features": {
+        "liquidity_ratio": 0.449,
+        "capital_adequacy": 0.15,
+        "leverage": 16.456322262287916,
+        "base_risk": 0.45302727691489564,
+        "stress_t": 0.7557546182054334
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "HSBC India",
+      "features": {
+        "liquidity_ratio": 0.447,
+        "capital_adequacy": 0.195,
+        "leverage": 27.63376604890159,
+        "base_risk": 0.36064586234596185,
+        "stress_t": 0.9678409195548385
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Citi India",
+      "features": {
+        "liquidity_ratio": 0.276,
+        "capital_adequacy": 0.07,
+        "leverage": 7.519450034435666,
+        "base_risk": 0.2770350850921459,
+        "stress_t": 0.9793044445125492
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "Deutsche Bank India",
+      "features": {
+        "liquidity_ratio": 0.387,
+        "capital_adequacy": 0.178,
+        "leverage": 5.581798393395647,
+        "base_risk": 0.381139739192858,
+        "stress_t": 0.38598087348741256
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "JP Morgan India",
+      "features": {
+        "liquidity_ratio": 0.833,
+        "capital_adequacy": 0.099,
+        "leverage": 7.954120690541407,
+        "base_risk": 0.49280166407700415,
+        "stress_t": 0.5266484319462486
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "NPCI (UPI)",
+      "features": {
+        "liquidity_ratio": 0.89,
+        "capital_adequacy": 0.163,
+        "leverage": 25.087023259621215,
+        "base_risk": 0.5678825371193557,
+        "stress_t": 0.6450084450640764
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "NSE Clearing Corp",
+      "features": {
+        "liquidity_ratio": 0.354,
+        "capital_adequacy": 0.085,
+        "leverage": 23.76536879102146,
+        "base_risk": 0.0818492582102327,
+        "stress_t": 0.5815000361940292
+      },
+      "label_next_high_risk": 0
+    },
+    {
+      "id": "CCIL",
+      "features": {
+        "liquidity_ratio": 0.799,
+        "capital_adequacy": 0.108,
+        "leverage": 28.268933140089118,
+        "base_risk": 0.16691448435772183,
+        "stress_t": 0.964545283196923
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "SEBI Surveillance",
+      "features": {
+        "liquidity_ratio": 0.873,
+        "capital_adequacy": 0.12,
+        "leverage": 23.771776694787434,
+        "base_risk": 0.2888126970843056,
+        "stress_t": 0.5057671037548106
+      },
+      "label_next_high_risk": 1
+    },
+    {
+      "id": "RBI Monitoring Node",
+      "features": {
+        "liquidity_ratio": 0.912,
+        "capital_adequacy": 0.131,
+        "leverage": 25.661436652693542,
+        "base_risk": 0.38924345839586993,
+        "stress_t": 0.11076417410356917
+      },
+      "label_next_high_risk": 0
+    }
+  ],
+  "edges": [
+    {
+      "source": "State Bank of India",
+      "target": "HDFC Bank",
+      "exposure": 0.766
+    },
+    {
+      "source": "State Bank of India",
+      "target": "ICICI Bank",
+      "exposure": 0.519
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Axis Bank",
+      "exposure": 1.312
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Kotak Mahindra Bank",
+      "exposure": 2.732
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Bank of Baroda",
+      "exposure": 0.596
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Punjab National Bank",
+      "exposure": 2.94
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Canara Bank",
+      "exposure": 0.249
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Bajaj Finance",
+      "exposure": 0.228
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Shriram Finance",
+      "exposure": 0.467
+    },
+    {
+      "source": "State Bank of India",
+      "target": "ICICI Prudential",
+      "exposure": 0.304
+    },
+    {
+      "source": "State Bank of India",
+      "target": "HDFC Mutual Fund",
+      "exposure": 0.198
+    },
+    {
+      "source": "State Bank of India",
+      "target": "Paytm Payments Bank",
+      "exposure": 0.356
+    },
+    {
+      "source": "HDFC Bank",
+      "target": "Bank of Baroda",
+      "exposure": 0.65
+    },
+    {
+      "source": "HDFC Bank",
+      "target": "Union Bank of India",
+      "exposure": 0.46
+    },
+    {
+      "source": "HDFC Bank",
+      "target": "Tata Capital",
+      "exposure": 0.133
+    },
+    {
+      "source": "HDFC Bank",
+      "target": "HSBC India",
+      "exposure": 0.219
+    },
+    {
+      "source": "HDFC Bank",
+      "target": "Citi India",
+      "exposure": 2.898
+    },
+    {
+      "source": "ICICI Bank",
+      "target": "Kotak Mahindra Bank",
+      "exposure": 0.666
+    },
+    {
+      "source": "ICICI Bank",
+      "target": "Punjab National Bank",
+      "exposure": 0.168
+    },
+    {
+      "source": "Axis Bank",
+      "target": "Kotak Mahindra Bank",
+      "exposure": 0.408
+    },
+    {
+      "source": "Axis Bank",
+      "target": "Shriram Finance",
+      "exposure": 1.99
+    },
+    {
+      "source": "Axis Bank",
+      "target": "Muthoot Finance",
+      "exposure": 2.819
+    },
+    {
+      "source": "Axis Bank",
+      "target": "ICICI Prudential",
+      "exposure": 0.564
+    },
+    {
+      "source": "Axis Bank",
+      "target": "Bajaj Allianz Life",
+      "exposure": 0.464
+    },
+    {
+      "source": "Axis Bank",
+      "target": "Airtel Payments Bank",
+      "exposure": 0.229
+    },
+    {
+      "source": "Axis Bank",
+      "target": "Cashfree Payments",
+      "exposure": 0.643
+    },
+    {
+      "source": "Axis Bank",
+      "target": "JP Morgan India",
+      "exposure": 0.726
+    },
+    {
+      "source": "Axis Bank",
+      "target": "NSE Clearing Corp",
+      "exposure": 0.745
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Bank of Baroda",
+      "exposure": 1.392
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "IDBI Bank",
+      "exposure": 1.651
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Bajaj Finance",
+      "exposure": 0.29
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Mahindra Finance",
+      "exposure": 0.35
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Tata Capital",
+      "exposure": 0.48
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "SBI Life Insurance",
+      "exposure": 2.604
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Reliance Mutual Fund",
+      "exposure": 2.974
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "HDFC Mutual Fund",
+      "exposure": 0.239
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Paytm Payments Bank",
+      "exposure": 2.631
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Cashfree Payments",
+      "exposure": 0.61
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "Standard Chartered India",
+      "exposure": 0.152
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "JP Morgan India",
+      "exposure": 0.181
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "CCIL",
+      "exposure": 0.536
+    },
+    {
+      "source": "Kotak Mahindra Bank",
+      "target": "SEBI Surveillance",
+      "exposure": 0.144
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "Punjab National Bank",
+      "exposure": 0.328
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "Canara Bank",
+      "exposure": 0.546
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "Union Bank of India",
+      "exposure": 0.431
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "IDBI Bank",
+      "exposure": 2.426
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "Mahindra Finance",
+      "exposure": 0.493
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "LIC of India",
+      "exposure": 0.446
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "SBI Life Insurance",
+      "exposure": 0.399
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "HDFC Life Insurance",
+      "exposure": 1.216
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "ICICI Prudential",
+      "exposure": 2.273
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "Reliance Mutual Fund",
+      "exposure": 0.456
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "Nippon India Mutual Fund",
+      "exposure": 0.275
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "UTI Mutual Fund",
+      "exposure": 0.629
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "HSBC India",
+      "exposure": 0.154
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "Deutsche Bank India",
+      "exposure": 0.213
+    },
+    {
+      "source": "Bank of Baroda",
+      "target": "SEBI Surveillance",
+      "exposure": 0.666
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "Canara Bank",
+      "exposure": 0.71
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "Union Bank of India",
+      "exposure": 0.231
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "Mahindra Finance",
+      "exposure": 0.478
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "Tata Capital",
+      "exposure": 0.727
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "Shriram Finance",
+      "exposure": 0.177
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "UTI Mutual Fund",
+      "exposure": 0.399
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "PhonePe Payments",
+      "exposure": 0.703
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "Razorpay",
+      "exposure": 2.021
+    },
+    {
+      "source": "Punjab National Bank",
+      "target": "RBI Monitoring Node",
+      "exposure": 0.255
+    },
+    {
+      "source": "Canara Bank",
+      "target": "IDBI Bank",
+      "exposure": 1.675
+    },
+    {
+      "source": "Canara Bank",
+      "target": "Bajaj Finance",
+      "exposure": 0.326
+    },
+    {
+      "source": "Canara Bank",
+      "target": "Muthoot Finance",
+      "exposure": 0.592
+    },
+    {
+      "source": "Canara Bank",
+      "target": "LIC of India",
+      "exposure": 0.78
+    },
+    {
+      "source": "Canara Bank",
+      "target": "Bajaj Allianz Life",
+      "exposure": 0.276
+    },
+    {
+      "source": "Canara Bank",
+      "target": "Reliance Mutual Fund",
+      "exposure": 0.311
+    },
+    {
+      "source": "Canara Bank",
+      "target": "HDFC Mutual Fund",
+      "exposure": 0.126
+    },
+    {
+      "source": "Canara Bank",
+      "target": "Paytm Payments Bank",
+      "exposure": 0.452
+    },
+    {
+      "source": "Canara Bank",
+      "target": "Standard Chartered India",
+      "exposure": 1.557
+    },
+    {
+      "source": "Canara Bank",
+      "target": "Deutsche Bank India",
+      "exposure": 0.268
+    },
+    {
+      "source": "Union Bank of India",
+      "target": "Muthoot Finance",
+      "exposure": 1.979
+    },
+    {
+      "source": "Union Bank of India",
+      "target": "ICICI Prudential MF",
+      "exposure": 0.269
+    },
+    {
+      "source": "Union Bank of India",
+      "target": "NPCI (UPI)",
+      "exposure": 0.633
+    },
+    {
+      "source": "Union Bank of India",
+      "target": "RBI Monitoring Node",
+      "exposure": 0.61
+    },
+    {
+      "source": "IDBI Bank",
+      "target": "PhonePe Payments",
+      "exposure": 0.543
+    },
+    {
+      "source": "Bajaj Finance",
+      "target": "HDFC Life Insurance",
+      "exposure": 0.475
+    },
+    {
+      "source": "Bajaj Finance",
+      "target": "Bajaj Allianz Life",
+      "exposure": 2.671
+    },
+    {
+      "source": "Bajaj Finance",
+      "target": "Nippon India Mutual Fund",
+      "exposure": 0.231
+    },
+    {
+      "source": "Bajaj Finance",
+      "target": "UTI Mutual Fund",
+      "exposure": 2.182
+    },
+    {
+      "source": "Tata Capital",
+      "target": "LIC of India",
+      "exposure": 0.112
+    },
+    {
+      "source": "Tata Capital",
+      "target": "ICICI Prudential MF",
+      "exposure": 0.259
+    },
+    {
+      "source": "Tata Capital",
+      "target": "Cashfree Payments",
+      "exposure": 0.222
+    },
+    {
+      "source": "Shriram Finance",
+      "target": "NPCI (UPI)",
+      "exposure": 0.371
+    },
+    {
+      "source": "Muthoot Finance",
+      "target": "SBI Life Insurance",
+      "exposure": 0.196
+    },
+    {
+      "source": "Muthoot Finance",
+      "target": "HDFC Life Insurance",
+      "exposure": 0.179
+    },
+    {
+      "source": "Muthoot Finance",
+      "target": "Airtel Payments Bank",
+      "exposure": 0.714
+    },
+    {
+      "source": "Muthoot Finance",
+      "target": "Standard Chartered India",
+      "exposure": 0.562
+    },
+    {
+      "source": "Muthoot Finance",
+      "target": "Citi India",
+      "exposure": 0.489
+    },
+    {
+      "source": "SBI Life Insurance",
+      "target": "ICICI Prudential MF",
+      "exposure": 0.269
+    },
+    {
+      "source": "SBI Life Insurance",
+      "target": "Razorpay",
+      "exposure": 2.794
+    },
+    {
+      "source": "Bajaj Allianz Life",
+      "target": "Deutsche Bank India",
+      "exposure": 0.543
+    },
+    {
+      "source": "Reliance Mutual Fund",
+      "target": "Nippon India Mutual Fund",
+      "exposure": 0.344
+    },
+    {
+      "source": "ICICI Prudential MF",
+      "target": "Airtel Payments Bank",
+      "exposure": 0.728
+    },
+    {
+      "source": "ICICI Prudential MF",
+      "target": "HSBC India",
+      "exposure": 0.646
+    },
+    {
+      "source": "ICICI Prudential MF",
+      "target": "JP Morgan India",
+      "exposure": 0.159
+    },
+    {
+      "source": "UTI Mutual Fund",
+      "target": "RBI Monitoring Node",
+      "exposure": 2.797
+    },
+    {
+      "source": "Paytm Payments Bank",
+      "target": "PhonePe Payments",
+      "exposure": 0.106
+    },
+    {
+      "source": "Paytm Payments Bank",
+      "target": "NSE Clearing Corp",
+      "exposure": 2.327
+    },
+    {
+      "source": "PhonePe Payments",
+      "target": "Razorpay",
+      "exposure": 1.322
+    },
+    {
+      "source": "PhonePe Payments",
+      "target": "NSE Clearing Corp",
+      "exposure": 0.584
+    },
+    {
+      "source": "Airtel Payments Bank",
+      "target": "CCIL",
+      "exposure": 0.257
+    },
+    {
+      "source": "Airtel Payments Bank",
+      "target": "SEBI Surveillance",
+      "exposure": 0.266
+    },
+    {
+      "source": "Standard Chartered India",
+      "target": "Citi India",
+      "exposure": 0.623
+    },
+    {
+      "source": "JP Morgan India",
+      "target": "NPCI (UPI)",
+      "exposure": 0.694
+    },
+    {
+      "source": "JP Morgan India",
+      "target": "CCIL",
+      "exposure": 0.498
+    }
+  ]
+}
