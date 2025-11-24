@@ -1,0 +1,4 @@
+{
+  "in_channels": 5,
+  "epochs": 80
+}
