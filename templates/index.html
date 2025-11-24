@@ -5,6 +5,47 @@
     <title>Temporal Graph Risk Dashboard (GNN)</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
+        .graph-container {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    border: 1px solid #1b293b;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #060b14 0%, #0b1525 100%);
+    box-shadow: 0 0 18px rgba(0,0,0,0.35);
+    transition: 0.3s ease;
+}
+
+.graph-container:hover {
+    box-shadow: 0 0 22px rgba(0,0,0,0.45);
+}
+
+.fullscreen {
+    position: fixed !important;
+    top: 0; left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999;
+    border-radius: 0 !important;
+}
+
+.expand-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #102333;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #cbd5f5;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.expand-btn:hover {
+    background: #1b3f5c;
+}
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -115,9 +156,11 @@
 
     <div class="main">
         <h2>Network Visualization</h2>
-        <div class="graph-container">
-            <svg id="graph-svg"></svg>
-        </div>
+<div class="graph-container" id="graph-box">
+    <div class="expand-btn" onclick="toggleFullscreen()">⛶</div>
+    <svg id="graph-svg"></svg>
+</div>
+
 
         <h2>High-Risk Predictions</h2>
         <table>
@@ -208,31 +251,50 @@ function drawGraph(nodes, links) {
         .append("line")
         .attr("stroke-width", d => 0.6 + (d.exposure || 0.2));
 
-    const node = svg.append("g")
-        .selectAll("circle")
-        .data(nodes)
-        .enter()
-        .append("circle")
-        .attr("r", 9)
-        .attr("fill", d => {
-    const score = Math.max(d.prob || 0, d.stress || 0);
-    if (score > 0.7) return "#ef4444";
-    if (score > 0.4) return "#fbbf24";
-    return "#22c55e";
-})
+const drag = d3.drag()
+    .on("start", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    })
+    .on("drag", (event, d) => {
+        d.fx = event.x;
+        d.fy = event.y;
+    })
+    .on("end", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    });
 
-        .attr("stroke", "#071824")
-        .attr("stroke-width", 1.0)
-        .on("click", (event, d) => onNodeClick(d));
+const node = svg.append("g")
+    .selectAll("circle")
+    .data(nodes)
+    .enter()
+    .append("circle")
+    .attr("r", 10)
+    .attr("fill", d => {
+        const score = Math.max(d.prob || 0, d.stress || 0);
+        if (score > 0.7) return "#ef4444";
+        if (score > 0.4) return "#fbbf24";
+        return "#22c55e";
+    })
+    .attr("stroke", "#071824")
+    .attr("stroke-width", 1.2)
+    .call(drag)   // ← makes nodes movable
+    .on("click", (event, d) => onNodeClick(d));
 
-    const label = svg.append("g")
-        .selectAll("text")
-        .data(nodes)
-        .enter()
-        .append("text")
-        .attr("font-size", 9)
-        .attr("fill", "#cbd5f5")
-        .text(d => getInitials(d.id));
+
+const label = svg.append("g")
+    .selectAll("text")
+    .data(nodes)
+    .enter()
+    .append("text")
+    .attr("font-size", 11)
+    .attr("font-weight", "600")
+    .attr("fill", "#cde3ff")
+    .style("pointer-events", "none")
+    .text(d => getInitials(d.id));
 
     node.append("title")
         .text(d => `${d.id}\nStress(t): ${d.stress.toFixed(3)}\nPredicted: ${d.prob.toFixed(3)}\nTrueNext: ${d.trueLabel}`);
@@ -245,6 +307,18 @@ function drawGraph(nodes, links) {
         node.attr("cx", d => d.x).attr("cy", d => d.y);
         label.attr("x", d => d.x + 12).attr("y", d => d.y + 4);
     });
+}
+function toggleFullscreen() {
+    const box = document.getElementById("graph-box");
+    if (box.classList.contains("fullscreen")) {
+        box.classList.remove("fullscreen");
+    } else {
+        box.classList.add("fullscreen");
+    }
+    // force D3 to recompute size
+    setTimeout(() => {
+        drawGraph(nodesCache, linksCache);
+    }, 200);
 }
 
 // ------------ Click handler & inspector UI ------------
