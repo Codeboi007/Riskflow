@@ -28,6 +28,9 @@
     z-index: 9999;
     border-radius: 0 !important;
 }
+.pulse {
+    filter: drop-shadow(0 0 6px #ff5e5e);
+}
 
 .expand-btn {
     position: absolute;
@@ -137,8 +140,9 @@
             {% endfor %}
         </select>
         <button onclick="loadData()">Load</button>
-        <button onclick="playAnimation()">Play</button>
-        <button onclick="stopAnimation()">Stop</button>
+<button onclick="playTimeline()">Play</button>
+<button onclick="pauseTimeline()">Pause</button>
+
 
         <h2>Stress Test</h2>
         <label>Liquidity Shock (%)</label>
@@ -179,6 +183,7 @@
 
 <script>
 // ------------ Vars & helpers ------------
+console.log("[JS LOADED]");
 let animTimer = null;
 let timelineTimer = null;
 let timelineFrames = [];
@@ -299,15 +304,61 @@ const label = svg.append("g")
     node.append("title")
         .text(d => `${d.id}\nStress(t): ${d.stress.toFixed(3)}\nPredicted: ${d.prob.toFixed(3)}\nTrueNext: ${d.trueLabel}`);
 
-    simulation.on("tick", () => {
-        link.attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
-        node.attr("cx", d => d.x).attr("cy", d => d.y);
-        label.attr("x", d => d.x + 12).attr("y", d => d.y + 4);
-    });
+simulation.on("tick", () => {
+    link.attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+    node.attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+
+    label.attr("x", d => d.x + 12)
+         .attr("y", d => d.y + 4);
+
+    // Save positions for pulse animation
+    nodes.forEach(n => {
+        n.xPos = n.x;
+        n.yPos = n.y;
+    });console.log("[TICK]");
+
+});
+
+
+    // Group to hold pulses
+// Layer for animated pulses
+const pulseLayer = svg.append("g").attr("class", "pulse-layer");
+
+console.log("[GRAPH DRAWN] nodes:", nodes.length, "edges:", links.length);
+
 }
+
+
+function createPulse(sx, sy, tx, ty, color = "#ef4444", duration = 900) {
+    console.log("[PULSE FIRED]", { sx, sy, tx, ty });
+
+    const pulse = d3.select("#graph-svg")
+        .append("circle")
+        .attr("r", 4)
+        .attr("fill", color)
+        .attr("cx", sx)
+        .attr("cy", sy)
+        .attr("opacity", 1);
+
+    pulse.transition()
+        .duration(duration)
+        .ease(d3.easeLinear)
+        .attr("cx", tx)
+        .attr("cy", ty)
+        .attr("opacity", 0)
+        .remove();
+}
+
+
+
+
+
+
 function toggleFullscreen() {
     const box = document.getElementById("graph-box");
     if (box.classList.contains("fullscreen")) {
@@ -395,6 +446,7 @@ async function runNodeScenario(nodeName) {
         })
     });
 
+
     const data = await res.json();
     if (data.error) {
         alert("Error: " + data.error);
@@ -408,6 +460,7 @@ async function runNodeScenario(nodeName) {
     document.getElementById("timeline-status").innerText = `Loaded ${timelineFrames.length} frames`;
     // show first frame immediately
     renderTimelineFrame(0);
+    console.log("[TIMELINE RECEIVED]", data.timeline);
 }
 
 // render one timeline frame (index)
@@ -422,6 +475,39 @@ function renderTimelineFrame(idx) {
     }));
     const edges = frame.edges;
     drawGraph(nodes, edges);
+    // Find which nodes changed stress the most from previous frame
+// Pulses when stress jumps
+if (idx > 0) {
+    const prev = {};
+    timelineFrames[idx-1].nodes.forEach(n => prev[n.id] = n.stress);
+
+    nodes.forEach(n => {
+        const delta = n.stress - (prev[n.id] ?? 0);
+console.log(`[DELTA] ${n.id}: prev=${prev[n.id] ?? 0} now=${n.stress} delta=${delta}`);
+
+
+        if (delta > 0.000000000001) {  // threshold for "significant contagion"
+            edges.forEach(e => {
+                if (e.target === n.id) {
+                    const s = nodes.find(nn => nn.id === e.source);
+                    if (s) createPulse(s.xPos, s.yPos, n.xPos, n.yPos, "#ff4d4d");
+                }
+                if (e.source === n.id) {
+                    const t = nodes.find(nn => nn.id === e.target);
+                    if (t) createPulse(n.xPos, n.yPos, t.xPos, t.yPos, "#ff4d4d");
+                }
+            });
+        }
+    });
+   console.log("[FRAME NODES]", nodes.map(n => ({
+    id: n.id,
+    stress: n.stress
+})));
+
+
+}
+
+
     updateTable(nodes);
     document.getElementById("timeline-status").innerText = `Frame ${idx}/${timelineFrames.length-1}`;
 }
